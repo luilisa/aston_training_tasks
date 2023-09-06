@@ -4,7 +4,12 @@ public class FoodBowl {
     private int foodAmount;
 
     public void putFood(int foodAmount) {
-        this.foodAmount = foodAmount;
+        if (foodAmount < 0) {
+            System.out.println("Положить можно только положительное количество корма!");
+        }
+        else {
+            this.foodAmount = foodAmount;
+        }
     }
 
     public int getFoodAmount() {
