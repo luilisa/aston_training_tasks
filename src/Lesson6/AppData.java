@@ -35,7 +35,7 @@ public class AppData implements Serializable{
         return s;
     }
 
-    //Считывание объекта из tmp и запись в формате string в appd.csv
+    //Сохранение файла в appd.csv
     public static void save(AppData data) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter("appd.csv"))) {
         bw.write(data.toString());
