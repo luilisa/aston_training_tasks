@@ -1,6 +1,9 @@
 package Lesson6;
 
+import javax.xml.crypto.Data;
 import java.io.*;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class AppData implements Serializable{
     private String[] header;
@@ -35,63 +38,93 @@ public class AppData implements Serializable{
         return s;
     }
 
-    //запись объекта в бинарный файл tmp.bin (хранит двоичную запись объекта)
-    public static void writeObjectToTmpFile(AppData data) {
-        try (FileOutputStream out = new FileOutputStream("tmp.bin");
-             ObjectOutputStream objOut = new ObjectOutputStream(out)) {
-            objOut.writeObject(data);
-        } catch (IOException e) {
-            System.out.println("Не удалось записать объект в tmp.bin");
-        }
-    }
-
     //Считывание объекта из tmp и запись в формате string в appd.csv
     public static void save(AppData data) {
-        writeObjectToTmpFile(data);
-        try (FileOutputStream out = new FileOutputStream("appd.csv");
-             FileInputStream in = new FileInputStream("tmp.bin");
-             ObjectInputStream objIn = new ObjectInputStream(in)) {
-            AppData appData;
-            appData = (AppData) objIn.readObject();
-            out.write(appData.toString().getBytes());
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("appd.csv"))) {
+        bw.write(data.toString());
+        } catch (IOException e) {
+        e.printStackTrace();
         }
     }
 
-    //Восстановление объекта, записанного в tmp.bin
-    public static AppData read() {
-        AppData appData = null;
-        try (FileInputStream in = new FileInputStream("tmp.bin");
-             ObjectInputStream objIn = new ObjectInputStream(in)) {
-            appData = (AppData) objIn.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+    //считает количество строк в файле, не считая headers
+    public int countRowsInFile(String file) {
+        int i = 0;
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            while ((br.readLine())!=null) {
+                i++;
+            }
         }
-        return appData;
+        catch (IOException exc){
+            exc.printStackTrace();
+
+        }
+        return i-1;
+    }
+
+    //считывает файл и записывает данные в экзмепляр AppData
+    public void readFromCSV(String file) {
+        try(BufferedReader br = new BufferedReader(new FileReader(file)))
+        {
+            String s;
+
+            if ((s = br.readLine())!=null) {
+                this.header = s.split(";");
+            }
+
+            String[][] valuesString = new String[countRowsInFile(file)][];
+
+            int i = 0;
+            while (((s = br.readLine())!=null)) {
+                valuesString[i] = s.split(";");
+                i++;
+            }
+            this.values = new int[valuesString.length][valuesString[0].length];
+            for (int x = 0; x < valuesString.length; x ++) {
+                for (int y = 0; y < valuesString[x].length; y ++) {
+                    this.values[x][y] = Integer.parseInt(valuesString[x][y]);
+                }
+            }
+
+        }
+        catch(IOException ex){
+            System.out.println(ex.getMessage());
+        }
     }
 
 
     public static void main(String[] args) {
 
-        int[][] values1 = {{100, 200, 123, 400, 500},
-                {300, 400, 500, 800, 500},
-                {600, 700, 1000, 9, 800}};
-        String[] header1 = {"Value 1", "Value 2", "Value 3", "Value 4", "Value 5"};
-
-        int[][] values2 = {{100, 200, 123},
+        int[][] values1 = {{100, 200, 123},
                 {300, 400, 500},
                 {600, 700, 1000}};
-        String[] header2 = {"Value 1", "Value 2", "Value 3"};
+        String[] header1 = {"Value 1", "Value 2", "Value 3"};
+
+        int[][] values2 = {{100, 200, 123, 400, 500},
+                {300, 400, 500, 800, 500},
+                {600, 700, 1000, 9, 800}};
+        String[] header2 = {"Value 1", "Value 2", "Value 3", "Value 4", "Value 5"};
 
         AppData appData1 = new AppData(header1, values1);
         AppData appData2 = new AppData(header2, values2);
+        AppData appData3 = new AppData();
 
+//        Запишем в файл csv созданный объект appData1 со значениями header1 и values1
         save(appData1);
-        //save перезаписывает файл tmp и appd
-        save(appData2);
+        System.out.println("Записанные значения объекта appData1 в файле csv\n" + appData1.toString());
 
-        System.out.println(read().toString());
+        //Прочитаем файл appd.csv и запишем его данные в новый, пустой объект appData3
+        appData3.readFromCSV("appd.csv");
+        System.out.println("Значения объекта appData3, заполненные из файла appd.csv:\n" + appData3.toString());
+
+        //Запишем в файл csv созданный объект appData2 со значениями header2 и values2
+        save(appData2);
+        System.out.println("Записанные значения объекта appData2 в файле csv\n" + appData2);
+
+//        Прочитаем файл appd.csv и запишем его данные в объект appData3
+        appData3.readFromCSV("appd.csv");
+        System.out.println("Новые значения appData3:\n" + appData3.toString());
+
     }
 
 }
