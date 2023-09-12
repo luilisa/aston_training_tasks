@@ -1,9 +1,6 @@
 package Lesson6;
 
-import javax.xml.crypto.Data;
 import java.io.*;
-import java.util.Arrays;
-import java.util.Objects;
 
 public class AppData implements Serializable{
     private String[] header;
