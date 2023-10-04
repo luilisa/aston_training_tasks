@@ -16,6 +16,7 @@ public class StudentTask {
         );
 
         double average = students.stream()
+                .filter(student -> student.getGender().equals(Gender.MAN))
                 .mapToInt(Student::getAge)
                 .summaryStatistics()
                 .getAverage();

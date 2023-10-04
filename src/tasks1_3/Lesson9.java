@@ -24,7 +24,9 @@ public class Lesson9 {
 
         //3 задание
         List<String> fs = Arrays.asList("f10", "f15", "f2", "f4", "f4");
-        Object[] fsArray = fs.stream().sorted().toArray();
+        Object[] fsArray = fs.stream()
+                .sorted(Comparator.comparingInt(s -> Integer.parseInt(s.substring(1)))).toArray();
+
         System.out.println(Arrays.toString(fsArray));
     }
 
