@@ -4,8 +4,13 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.remote.AndroidMobileCapabilityType;
 import io.appium.java_client.remote.MobileCapabilityType;
+import io.qameta.allure.Description;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.Step;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -34,6 +39,8 @@ public class AppTest {
         }
     }
 
+    @DisplayName("Проверка операции сложения")
+    @Severity(SeverityLevel.CRITICAL)
     @Test
     public void additionTest() {
         driver.findElementById("com.google.android.calculator:id/digit_1").click();
@@ -44,6 +51,9 @@ public class AppTest {
         assertEquals("3", driver.findElementById("com.google.android.calculator:id/result_final").getText());
     }
 
+    @DisplayName("Проверка операции вычитания")
+    @Description("Проверка операции вычитания")
+    @Severity(SeverityLevel.CRITICAL)
     @Test
     public void substractionTest() {
         driver.findElementById("com.google.android.calculator:id/digit_9").click();
@@ -54,6 +64,9 @@ public class AppTest {
         assertEquals("4", driver.findElementById("com.google.android.calculator:id/result_final").getText());
     }
 
+    @DisplayName("Проверка операции умножения")
+    @Step("Проверка операции умножения")
+    @Severity(SeverityLevel.CRITICAL)
     @Test
     public void multiplicationTest() {
         driver.findElementById("com.google.android.calculator:id/digit_6").click();
@@ -64,6 +77,9 @@ public class AppTest {
         assertEquals("42", driver.findElementById("com.google.android.calculator:id/result_final").getText());
     }
 
+    @DisplayName("Проверка операции деления")
+    @Description("Проверка операции деления")
+    @Severity(SeverityLevel.CRITICAL)
     @Test
     public void divisionTest() {
         driver.findElementById("com.google.android.calculator:id/digit_7").click();
