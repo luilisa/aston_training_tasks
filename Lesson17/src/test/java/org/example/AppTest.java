@@ -29,10 +29,11 @@ public class AppTest {
         capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, "Pixel 3a");
         capabilities.setCapability(AndroidMobileCapabilityType.APP_PACKAGE,"com.google.android.calculator");
         capabilities.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY,"com.android.calculator2.Calculator");
+        capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "uiautomator2");
         capabilities.setCapability(MobileCapabilityType.NO_RESET, true);
 
         try {
-            driver = new AndroidDriver<>(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+            driver = new AndroidDriver<>(new URL("http://127.0.0.1:4723"), capabilities);
             driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         } catch (MalformedURLException e) {
             System.out.println(e.getMessage());
