@@ -4,12 +4,12 @@ pipeline {
         stage('build') {
             steps {
                 withMaven(traceability: true) {
-                    bat encoding: 'Cp866', script: 'mvn clean test'
+                    bat encoding: 'Cp866', script: 'mvn -f Lesson17/pom.xml clean test'
                 }
             }
             post {
                 always {
-                    allure includeProperties: false, jdk: '', results: [[path: 'target/allure-results']]
+                    allure includeProperties: false, jdk: '', results: [[path: 'Lesson17/target/allure-results']]
                 }
             }
         }
